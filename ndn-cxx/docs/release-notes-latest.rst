@@ -1,1 +1,5 @@
+XSym
+0037
+6b38a82b9a45cf5bf4d08476fe747ebb
 release-notes/release-notes-0.6.1.rst
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          

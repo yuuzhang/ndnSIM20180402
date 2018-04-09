@@ -1,11 +1,11 @@
 router
 
-Node0	NA	48	62	0	
-Node1	NA	48	62	0	
-Node2	NA	48	62	0	
-Node3	NA	48	62	0	
-Node4	NA	48	62	0	
-Node5	NA	48	62	0
+Node0	NA	48	62	1	
+Node1	NA	48	62	2	
+Node2	NA	48	62	3	
+Node3	NA	48	62	4	
+Node4	NA	48	62	5	
+Node5	NA	48	62	6
 
 
 link

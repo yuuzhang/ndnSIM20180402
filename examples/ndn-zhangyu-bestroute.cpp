@@ -74,8 +74,8 @@ main (int argc, char *argv[])
 	//----------------仿真拓扑----------------
 	AnnotatedTopologyReader topologyReader ("", 20);
 	//topologyReader.SetFileName ("src/ndnSIM/examples/topologies/26node-result.txt");
-	topologyReader.SetFileName ("src/ndnSIM/examples/topologies/topo-for-CompareMultiPath80k.txt");
-	//topologyReader.SetFileName ("src/ndnSIM/examples/topologies/12Nodes.txt");
+	//topologyReader.SetFileName ("src/ndnSIM/examples/topologies/topo-for-CompareMultiPath80k.txt");
+	topologyReader.SetFileName ("src/ndnSIM/examples/topologies/5Nodes-Debug.txt");
 	//topologyReader.SetFileName ("src/ndnSIM/examples/topologies/topo-for-xujun.txt");
 	topologyReader.Read ();
 	int nodesNumber=topologyReader.GetNodes().size();
@@ -99,7 +99,7 @@ main (int argc, char *argv[])
 	//生成consumer和producer的节点号动态数组
 	if(manualAssign)	{
 		int tmpConsumer[]={0,1};
-		int tmpProducer[]={2,3};
+		int tmpProducer[]={3,4};
 		consumerNodes.assign(tmpConsumer,tmpConsumer+sizeof(tmpConsumer)/sizeof(int));
 		producerNodes.assign(tmpProducer,tmpProducer+sizeof(tmpConsumer)/sizeof(int));
 	}
@@ -120,7 +120,7 @@ main (int argc, char *argv[])
 		//"none": no randomization
 		//"uniform": uniform distribution in range (0, 1/Frequency)
 		//"exponential": exponential distribution with mean 1/Frequency
-		consumerHelper.SetAttribute("Randomize", StringValue("exponential"));
+		consumerHelper.SetAttribute("Randomize", StringValue("uniform"));
 
 		Ptr<Node> consumer1 = Names::Find<Node> ("Node"+boost::lexical_cast<std::string> (consumerNodes[i]));
 		consumerHelper.SetPrefix ("/Node"+boost::lexical_cast<std::string>(consumerNodes[i]));
@@ -128,8 +128,8 @@ main (int argc, char *argv[])
 		app.Start(Seconds(0.01*i));
 		// Choosing forwarding strategy
 		//ndn::StrategyChoiceHelper::InstallAll("/Node"+boost::lexical_cast<std::string> (consumerNodes[i]), "/localhost/nfd/strategy/randomized-rounding");
-		//ndn::StrategyChoiceHelper::InstallAll("/Node"+boost::lexical_cast<std::string> (consumerNodes[i]), "/localhost/nfd/strategy/best-route");
-		ndn::StrategyChoiceHelper::InstallAll("/Node"+boost::lexical_cast<std::string> (consumerNodes[i]), "/localhost/nfd/strategy/ncc");
+		ndn::StrategyChoiceHelper::InstallAll("/Node"+boost::lexical_cast<std::string> (consumerNodes[i]), "/localhost/nfd/strategy/best-route");
+		//ndn::StrategyChoiceHelper::InstallAll("/Node"+boost::lexical_cast<std::string> (consumerNodes[i]), "/localhost/nfd/strategy/ncc");
 
 		std::cout <<"ZhangYu  consumer1->GetId(): " <<consumer1->GetId() << "  prefix: /Node"+boost::lexical_cast<std::string>(consumerNodes[i]) << std::endl;
 	}
@@ -150,6 +150,7 @@ main (int argc, char *argv[])
 	if(routingName.compare("BestRoute")==0){
 	  ndn::GlobalRoutingHelper::CalculateRoutes ();
 	}
+	/*
 	else if(routingName.compare("k-shortest")==0){
 		ndn::GlobalRoutingHelper::CalculateNoCommLinkMultiPathRoutes(2);
 	}
@@ -162,6 +163,7 @@ main (int argc, char *argv[])
 		ndn::GlobalRoutingHelper::addRouteHop("Node0","/Node0","Node1",1);
 		ndn::GlobalRoutingHelper::addRouteHop("Node1","/Node0","Node4",1);
 	}
+	*/
 	else if(routingName.compare("Flooding")==0){
 		ndn::GlobalRoutingHelper::CalculateAllPossibleRoutes();
 	}
@@ -178,7 +180,6 @@ main (int argc, char *argv[])
 	//ZhangYu Add the trace，不愿意文件名称还有大小写的区别，所以把 routingName 全部转为小写
 	std::transform(routingName.begin(), routingName.end(), routingName.begin(), ::tolower);
 	string filename="-"+routingName+"-"+boost::lexical_cast<std::string>(InterestsPerSec)+".txt";
-	//filename=".txt";
 
 	TraceSpan=simulationSpan/recordsNumber;
 	if(TraceSpan<1)
